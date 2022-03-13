@@ -1,13 +1,13 @@
 const { EventEmitter } = require('events')
-const webRTCSwarm = require('@geut/discovery-swarm-webrtc')
-const HyperswarmClient = require('hyperswarm-proxy-ws/client')
+const webRTCSwarm = require('@web4/discovery-swarm-webrtc')
+const BitswarmClient = require('@web4/bitswarm-proxy-ws/client')
 const DuplexPair = require('duplexpair')
 
-const DEFAULT_WEBRTC_BOOTSTRAP = ['wss://geut-webrtc-signal-v3.herokuapp.com', 'wss://signal.dat-web.eu', 'wss://geut-webrtc-signal-v3.glitch.me']
-const DEFAULT_PROXY_SERVER = 'wss://hyperswarm.mauve.moe'
+const DEFAULT_WEBRTC_BOOTSTRAP = ['wss://signal1.bitdht.com', 'wss://signal2.bitdht.com', 'wss://signal3.bitdht.com']
+const DEFAULT_PROXY_SERVER = 'wss://proxy.bitdht.com'
 
 module.exports = function swarm (opts) {
-  return new HyperswarmWeb(opts)
+  return new BitswarmWeb(opts)
 }
 
 function getBootstrapUrls(path, defaultUrls = [], specificUrls = []) {
@@ -40,7 +40,7 @@ function webrtcPeerInfo (info) {
   }
 }
 
-class HyperswarmWeb extends EventEmitter {
+class BitswarmWeb extends EventEmitter {
   constructor (opts = {}) {
     super()
     const {
@@ -99,7 +99,7 @@ class HyperswarmWeb extends EventEmitter {
     this.webrtc.on('connection', (connection, info) => this._handleConnection(connection, webrtcPeerInfo(info)))
     this.webrtc.on('connection-closed', (connection, info) => this._handleDisconnection(connection, webrtcPeerInfo(info)))
 
-    this.ws = new HyperswarmClient(this.wsOpts)
+    this.ws = new BitswarmClient(this.wsOpts)
     this.ws.on('connection', (connection, info) => this._handleConnection(connection, info))
     this.ws.on('disconnection', (connection, info) => this._handleDisconnection(connection, info))
   }

@@ -1,22 +1,22 @@
-# hyperswarm-web
-Implementation of the hyperswarm API for use in web browsers
+# bitswarm-web
+Implementation of the bitswarm API for use in web browsers
 
 
 ## Using in an application
 
 ```
-npm i -s hyperswarm-web
+npm i -s @web4/bitswarm-web
 ```
 
 ```js
-// Based on example in hyperswarm repo
-// Try running the regular hyperswarm demo with node
-const hyperswarm = require('hyperswarm-web')
+// Based on example in bitswarm repo
+// Try running the regular bitswarm demo with node
+const bitswarm = require('@web4/bitswarm-web')
 const crypto = require('crypto')
 
-const swarm = hyperswarm({
-  // Specify a server list of HyperswarmServer instances
-  bootstrap: ['ws://yourhyperswarmserver.com'],
+const swarm = bitswarm({
+  // Specify a server list of BitswarmServer instances
+  bootstrap: ['ws://yourbitswarmserver.com'],
   // You can also specify proxy and signal servers separated
   wsProxy: [
     'ws://proxy1.com',
@@ -47,7 +47,7 @@ const swarm = hyperswarm({
 
 // look for peers listed under this topic
 const topic = crypto.createHash('sha256')
-  .update('my-hyperswarm-topic')
+  .update('my-bitswarm-topic')
   .digest()
 
 swarm.join(topic)
@@ -56,7 +56,7 @@ swarm.on('connection', (socket, details) => {
   console.log('new connection!', details)
 
   // you can now use the socket as a stream, eg:
-  // socket.pipe(hypercore.replicate()).pipe(socket)
+  // socket.pipe(unichain.replicate()).pipe(socket)
 })
 
 swarm.on('disconnection', (socket, details) => {
@@ -67,52 +67,52 @@ swarm.on('disconnection', (socket, details) => {
 
 Build it with [Browserify](http://browserify.org/) to get it running on the web.
 
-You could also compile an existing codebase relying on hyperswarm to run on the web by adding a `browser` field set to `{"hyperswarm": "hyperswarm-web"}` to have Browserify alias it when compiling dependencies.
+You could also compile an existing codebase relying on bitswarm to run on the web by adding a `browser` field set to `{"bitswarm": "bitswarm-web"}` to have Browserify alias it when compiling dependencies.
 
 ## Setting up a proxy server
 
-`HyperswarmServer` provides two services:
+`BitswarmServer` provides two services:
 
-  - [HyperswarmProxyWS](https://github.com/RangerMauve/hyperswarm-proxy-ws): to proxy hyperswarm connections over websockets. Path: `ws://yourserver/proxy`
-  - [SignalServer](https://github.com/geut/discovery-swarm-webrtc#server): for P2P WebRTC signaling connections. Path: `ws://yourserver/signal`
+  - [BitswarmProxyWS](https://github.com/bitwebs/bitswarm-proxy-ws): to proxy bitswarm connections over websockets. Path: `ws://yourserver/proxy`
+  - [SignalServer](https://github.com/bitwebs/discovery-swarm-webrtc#server): for P2P WebRTC signaling connections. Path: `ws://yourserver/signal`
 
-Running a `HyperswarmServer` will allows you to use both services in one single process.
+Running a `BitswarmServer` will allows you to use both services in one single process.
 
 ```
-npm i -g hyperswarm-web
+npm i -g @web4/bitswarm-web
 
 # Run it! Default port is 4977 (HYPR on a phone pad)
-hyperswarm-web
+bitswarm-web
 
 # Run it with a custom port
-hyperswarm-web --port 42069
+bitswarm-web --port 42069
 ```
 
 ### Running as a Linux service with SystemD
 
 ```bash
-sudo cat << EOF > /etc/systemd/system/hyperswarm-web.service
+sudo cat << EOF > /etc/systemd/system/bitswarm-web.service
 [Unit]
-Description=Hyperswarm proxy server which webpages can connect to.
+Description=Bitswarm proxy server which webpages can connect to.
 
 [Service]
 Type=simple
-# Check that hyperswarm-web is present at this location
+# Check that bitswarm-web is present at this location
 # If it's not, replace the path with its location
-# You can get the location with 'whereis hyperswarm-web'
+# You can get the location with 'whereis bitswarm-web'
 # Optionally add a --port parameter if you don't want 4977
-ExecStart=/usr/local/bin/hyperswarm-web
+ExecStart=/usr/local/bin/bitswarm-web
 Restart=always
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
-sudo chmod 644 /etc/systemd/system/hyperswarm-web.service
+sudo chmod 644 /etc/systemd/system/bitswarm-web.service
 
 sudo systemctl daemon-reload
-sudo systemctl enable hyperswarm-web
-sudo systemctl start hyperswarm-web
+sudo systemctl enable bitswarm-web
+sudo systemctl start bitswarm-web
 
-sudo systemctl status hyperswarm-web
+sudo systemctl status bitswarm-web
 ```

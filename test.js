@@ -1,6 +1,6 @@
-const hyperswarm = require('hyperswarm')
-const HyperswarmServer = require('./server')
-const hyperswarmweb = require('./')
+const bitswarm = require('@web4/bitswarm')
+const BitswarmServer = require('./server')
+const bitswarmweb = require('./')
 const test = require('tape')
 const getPort = require('get-port')
 const crypto = require('crypto')
@@ -10,25 +10,25 @@ let server = null
 let port = null
 test('Setup', async function (t) {
   // Initialize local proxy
-  server = new HyperswarmServer()
+  server = new BitswarmServer()
   port = await getPort()
   server.listen(port)
   t.end()
 });
 
-test('Connect to local hyperswarm through local proxy', async (t) => {
+test('Connect to local bitswarm through local proxy', async (t) => {
   t.plan(6)
   try {
-    // Initialize local hyperswarm instance, listen for peers
-    const swarm = hyperswarm()
+    // Initialize local bitswarm instance, listen for peers
+    const swarm = bitswarm()
 
     // Initialize client
     const hostname = `ws://localhost:${port}`
-    const client = hyperswarmweb({
+    const client = bitswarmweb({
       bootstrap: [hostname]
     })
 
-    // Test connections in regular hyperswarm
+    // Test connections in regular bitswarm
     swarm.once('connection', (connection, info) => {
       t.pass('Got connection locally')
       connection.once('end', () => {
@@ -41,7 +41,7 @@ test('Connect to local hyperswarm through local proxy', async (t) => {
       connection.write('Hello World')
     })
 
-    // Test connections in proxied hyperswarm
+    // Test connections in proxied bitswarm
     client.once('connection', (connection) => {
       connection.on('error', () => {
         // Whatever
@@ -68,7 +68,7 @@ test('Connect to local hyperswarm through local proxy', async (t) => {
 
     const key = crypto.randomBytes(32)
 
-    // Join channel on local hyperswarm
+    // Join channel on local bitswarm
     swarm.join(key, {
       announce: true,
       lookup: true
@@ -87,13 +87,13 @@ test('Connect to webrtc peers', async (t) => {
   try {
     // Initialize client
     const hostname = `ws://localhost:${port}`
-    const client1 = hyperswarmweb({
+    const client1 = bitswarmweb({
       bootstrap: [hostname],
       simplePeer: {
         wrtc
       }
     })
-    const client2 = hyperswarmweb({
+    const client2 = bitswarmweb({
       bootstrap: [hostname],
       simplePeer: {
         wrtc

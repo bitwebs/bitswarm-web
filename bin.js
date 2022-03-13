@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const HyperswarmServer = require('./server')
+const BitswarmServer = require('./server')
 
 const http = require('http')
 const send = require('send')
@@ -17,7 +17,7 @@ const server = http.createServer(function onRequest (req, res) {
     .pipe(res)
 })
 
-const wsServer = new HyperswarmServer()
+const wsServer = new BitswarmServer()
 
 wsServer.listenOnServer(server)
 
