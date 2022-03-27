@@ -1,6 +1,6 @@
 {
   "name": "@web4/bitswarm-web",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Implementation of the bitswarm API for use in web browsers",
   "main": "index.js",
   "scripts": {
@@ -35,7 +35,7 @@
     "websocket-stream": "^5.5.2"
   },
   "devDependencies": {
-    "bitswarm": "^1.0.0",
+    "@web4/bitswarm": "^1.0.0",
     "get-port": "^5.1.0",
     "tape": "^4.12.1",
     "wrtc": "^0.4.6"
